@@ -1763,18 +1763,19 @@
     // ===== FAB SPEED-DIAL =====
     let fabOpen = false;
 
-    // Wrapper keeps FAB + dial options stacked correctly
+    // Wrapper — sized exactly to the FAB button, clicks pass through
     const fabWrap = document.createElement('div');
     Object.assign(fabWrap.style, {
-        position: 'fixed', bottom: '28px', right: '28px',
+        position: 'fixed', bottom: '24px', right: '24px',
         zIndex: '2147483647',
-        display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '10px',
+        pointerEvents: 'none',           // ← clicks pass through to the page
         fontFamily: "'Inter', system-ui, sans-serif"
     });
 
-    // ── Dial options (rendered above FAB) ──────────────────────
+    // ── Dial options (absolutely positioned above FAB) ─────────
     const dialContainer = document.createElement('div');
     Object.assign(dialContainer.style, {
+        position: 'absolute', bottom: '52px', right: '0',
         display: 'flex', flexDirection: 'column', alignItems: 'flex-end',
         gap: '8px', pointerEvents: 'none', opacity: '0'
     });
@@ -1802,10 +1803,10 @@
         const icon = document.createElement('div');
         icon.innerText = emoji;
         Object.assign(icon.style, {
-            width: '42px', height: '42px', borderRadius: '13px',
+            width: '36px', height: '36px', borderRadius: '10px',
             background: 'linear-gradient(135deg,#7c3aed,#4f46e5)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            fontSize: '20px', flexShrink: '0',
+            fontSize: '17px', flexShrink: '0',
             boxShadow: '0 4px 14px rgba(124,58,237,0.55)',
             transition: 'transform 0.18s'
         });
@@ -1886,7 +1887,8 @@
         });
         dialContainer.style.opacity = '1';
         fab.style.transform = 'rotate(45deg) scale(1.08)';
-        fab.style.boxShadow = '0 8px 30px rgba(124,58,237,0.8)';
+        fab.style.boxShadow = '0 6px 24px rgba(124,58,237,0.7)';
+        fab.style.opacity   = '1';
         fab.style.animation = 'none';
     }
 
@@ -1899,37 +1901,41 @@
         });
         setTimeout(() => { dialContainer.style.opacity = '0'; }, 280);
         fab.style.transform = '';
-        fab.style.boxShadow = '0 4px 20px rgba(124,58,237,0.6)';
+        fab.style.opacity   = '0.7';
+        fab.style.boxShadow = '0 3px 14px rgba(124,58,237,0.5)';
         fab.style.animation = 'fabPulse 2.5s ease-in-out infinite';
     }
 
     // ── Main FAB button ────────────────────────────────────────
     const fab = document.createElement('button');
     fab.id    = 'ai-sticky-fab';
-    fab.innerHTML = '<span style="line-height:1;font-size:24px">✦</span>';
+    fab.innerHTML = '<span style="line-height:1;font-size:18px">✦</span>';
     fab.title = 'Sticky Notes Menu';
     Object.assign(fab.style, {
-        width: '54px', height: '54px', borderRadius: '16px',
+        width: '42px', height: '42px', borderRadius: '12px',
         background: 'linear-gradient(135deg, #7c3aed 0%, #4f46e5 100%)',
         color: '#fff', border: '1px solid rgba(255,255,255,0.2)',
-        boxShadow: '0 4px 20px rgba(124,58,237,0.6)',
+        boxShadow: '0 3px 14px rgba(124,58,237,0.5)',
         cursor: 'pointer',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         transition: 'all 0.25s cubic-bezier(0.34,1.56,0.64,1)',
-        flexShrink: '0',
+        pointerEvents: 'auto',              // ← only the button intercepts clicks
+        opacity: '0.7',                      // ← 70% transparent by default
         animation: 'fabPulse 2.5s ease-in-out infinite'
     });
     fab.onmouseenter = () => {
+        fab.style.opacity = '1';             // full opacity on hover
         if (!fabOpen) {
             fab.style.transform = 'scale(1.1) translateY(-2px)';
-            fab.style.boxShadow = '0 8px 24px rgba(124,58,237,0.75)';
+            fab.style.boxShadow = '0 6px 20px rgba(124,58,237,0.7)';
             fab.style.animation = 'none';
         }
     };
     fab.onmouseleave = () => {
+        fab.style.opacity = '0.7';           // back to 70%
         if (!fabOpen) {
             fab.style.transform = '';
-            fab.style.boxShadow = '0 4px 20px rgba(124,58,237,0.6)';
+            fab.style.boxShadow = '0 3px 14px rgba(124,58,237,0.5)';
             fab.style.animation = 'fabPulse 2.5s ease-in-out infinite';
         }
     };
