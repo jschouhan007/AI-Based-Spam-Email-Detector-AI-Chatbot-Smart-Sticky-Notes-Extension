@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "NeuroDesk - AI Email Spam + Notes",
+  "version": "2.1",
+  "description": "NeuroDesk: AI-powered Gmail spam detection, smart email summarization, and a global sticky notes productivity suite with reminders, Pomodoro timer, and cross-tab sync.",
+  "permissions": ["activeTab", "storage", "contextMenus", "alarms", "notifications", "scripting"],
+  "host_permissions": [
+    "http://127.0.0.1:5000/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://mail.google.com/*"],
+      "js": ["content.js"]
+    },
+    {
+      "matches": ["<all_urls>"],
+      "js": ["sticky.js"]
+    }
+  ]
+}
